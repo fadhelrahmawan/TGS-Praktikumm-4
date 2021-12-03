@@ -8,44 +8,74 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace P4_2_1184064
+namespace P4_3_1184064
 {
     public partial class Form1 : Form
     {
-        private string filePath;
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void openFileButton_Click(object sender, EventArgs e)
+        private void texthuruf_Leave(object sender, EventArgs e)
         {
-            try
+            if (texthuruf.Text == "")
             {
-                DialogResult userResponse = openFileDialog1.ShowDialog();
-                if (userResponse == DialogResult.OK)
+                epWarning.SetError(texthuruf, "Text Tidak Boleh Kosong!");
+                epWrong.SetError(texthuruf, "");
+                epCorrect.SetError(texthuruf, ""); 
+            }
+            else
+            {
+                if ((texthuruf.Text).All(char.IsLetter))
                 {
-                    filePath = openFileDialog1.FileName.ToString();
-                    MessageBox.Show("You Successfully opened: " + filePath + "'", "Success",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information,
-                        MessageBoxDefaultButton.Button1);
+                    epWarning.SetError(texthuruf, "");
+                    epWrong.SetError(texthuruf, "");
+                    epCorrect.SetError(texthuruf, "Betul!");
                 }
                 else
-                    MessageBox.Show("You canceled the open file operation", "Warning",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning,
-                        MessageBoxDefaultButton.Button1,
-                        MessageBoxOptions.RightAlign);
+                {
+                    epWrong.SetError(texthuruf, "Inputan hanya boleh huruf");
+                    epWarning.SetError(texthuruf, "");
+                    epCorrect.SetError(texthuruf, "");
+                }
             }
-            catch (Exception ex)
+        }
+
+        private void textangka_Leave(object sender, EventArgs e)
+        {
+            if ((textangka.Text).All(char.IsNumber))
             {
-                MessageBox.Show(ex.Message.ToString(), "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                epCorrect.SetError(texthuruf, "Betul!");
+                epWarning.SetError(textangka, "");
+                epWrong.SetError(textangka, "");
+            }
+            else
+            {
+                epCorrect.SetError(textangka, "");
+                epWarning.SetError(textangka, "");
+                epWrong.SetError(textangka, "Inputan hanya boleh angka");
+            }
+        }
+
+        private void textemail_Leave(object sender, EventArgs e)
+        {
+            if (Regex.IsMatch(textemail.Text, @"^^[@^\s]+@[@^\s]+(\.[@^\s]+)+$"))
+            {
+                epWarning.SetError(textemail, "");
+                epWrong.SetError(textemail, "");
+                epCorrect.SetError(textemail, "Betul!");
+            }
+            else
+            {
+                epWrong.SetError(textemail, "Format email salah!\ nContoh: a@b.c");
+                epWarning.SetError(textemail, "");
+                epCorrect.SetError(textemail, "");
             }
         }
     }
-}
